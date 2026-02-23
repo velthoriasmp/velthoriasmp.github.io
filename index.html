@@ -8,91 +8,123 @@
 
 <style>
 body{margin:0;font-family:Poppins,sans-serif;background:#07070f;color:white}
-nav{display:flex;justify-content:space-between;padding:20px 40px;background:#0d0d1a}
-nav h1{color:#a970ff}
-nav button{background:#6a5cff;border:none;color:white;padding:8px 16px;border-radius:6px;cursor:pointer}
+nav{display:flex;gap:20px;padding:20px;background:#0d0d1a}
+nav a{cursor:pointer;color:#b983ff;text-decoration:none}
 
-.hero{text-align:center;padding:80px 20px;background:radial-gradient(circle,#1b1240,#050509)}
-.hero h2{font-size:42px;margin-bottom:10px;color:#b983ff}
+.page{display:none;padding:60px 20px;text-align:center}
+.active{display:block}
 
-.section{padding:60px 20px;text-align:center}
 .card{background:#101022;padding:25px;border-radius:12px;max-width:420px;margin:20px auto}
 input,textarea{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#1a1a33;color:white}
-button.submit{background:#7a5cff;border:none;padding:10px 20px;border-radius:6px;color:white;cursor:pointer}
-
-#panel{display:none}
-.tag{background:#6a5cff;padding:6px 12px;border-radius:6px;display:inline-block;margin-top:10px}
+button{background:#7a5cff;border:none;padding:10px 20px;border-radius:6px;color:white;cursor:pointer}
+.tag{background:#6a5cff;padding:6px 12px;border-radius:6px;display:inline-block;margin:6px}
 </style>
 </head>
 
 <body>
 
 <nav>
-<h1>VELTHORIA</h1>
-<button onclick="openPanel()">Yetkili Paneli</button>
+<a onclick="show('home')">Ana Sayfa</a>
+<a onclick="show('register')">Kayıt</a>
+<a onclick="show('profile')">Profil</a>
+<a onclick="show('apply')">Yetkili Başvuru</a>
+<a onclick="openPanel()">Yetkili Panel</a>
 </nav>
 
-<section class="hero">
-<h2>Velthoria SMP</h2>
+<!-- HOME -->
+<div id="home" class="page active">
+<h1>Velthoria SMP</h1>
 <p>IP: velthoria.falixsrv.me</p>
-</section>
-
-<!-- KAYIT -->
-<section class="section">
-<div class="card">
-<h3>Kayıt Ol</h3>
-<input id="username" placeholder="Kullanıcı adı">
-<input id="email" placeholder="E-posta">
-<button class="submit" onclick="register()">Kayıt Ol</button>
-<p id="registerMsg"></p>
 </div>
-</section>
 
-<!-- BAŞVURU -->
-<section class="section">
+<!-- REGISTER -->
+<div id="register" class="page">
 <div class="card">
-<h3>Yetkili Başvurusu</h3>
-<input id="nick" placeholder="Minecraft Nick">
-<textarea id="reason" placeholder="Neden yetkili olmak istiyorsun"></textarea>
-<button class="submit" onclick="apply()">Başvur</button>
+<h3>Kayıt</h3>
+<input id="regUser" placeholder="Kullanıcı adı">
+<button onclick="register()">Kayıt Ol</button>
+<p id="regMsg"></p>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="page">
+<div class="card">
+<h3>Profil</h3>
+<p id="profileName">Kullanıcı yok</p>
+<div id="profileTags"></div>
+</div>
+</div>
+
+<!-- APPLY -->
+<div id="apply" class="page">
+<div class="card">
+<h3>Yetkili Başvuru</h3>
+<textarea id="applyText" placeholder="Başvurun"></textarea>
+<button onclick="apply()">Gönder</button>
 <p id="applyMsg"></p>
 </div>
-</section>
+</div>
 
 <!-- PANEL -->
-<section id="panel" class="section">
+<div id="panel" class="page">
 <div class="card">
-<h3>Yetkili Paneli</h3>
-<input id="tagInput" placeholder="Tag yaz">
-<button class="submit" onclick="addTag()">Tag Ekle</button>
-<div id="tags"></div>
+<h3>Yetkili Panel</h3>
+<input id="tagUser" placeholder="Kullanıcı">
+<input id="tagText" placeholder="Tag">
+<button onclick="giveTag()">Tag Ver</button>
 </div>
-</section>
+</div>
 
 <script>
+let currentUser=""
+let tags={}
+
+function show(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+}
+
 function register(){
-document.getElementById("registerMsg").innerText="Kayıt başarılı ✔"
+currentUser=document.getElementById("regUser").value
+document.getElementById("regMsg").innerText="Kayıt başarılı"
+document.getElementById("profileName").innerText=currentUser
+show("profile")
 }
 
 function apply(){
-document.getElementById("applyMsg").innerText="Başvurun gönderildi ✔"
+document.getElementById("applyMsg").innerText="Başvuru gönderildi"
 }
 
 function openPanel(){
-let pass=prompt("Yetkili şifresi gir")
-if(pass==="velthoria123"){
-document.getElementById("panel").style.display="block"
-}else{
-alert("Yanlış şifre")
+let pass=prompt("Şifre")
+if(pass==="velthoria123"){show("panel")}
+else alert("Yanlış")
+}
+
+function giveTag(){
+let user=document.getElementById("tagUser").value
+let tag=document.getElementById("tagText").value
+
+if(!tags[user]) tags[user]=[]
+tags[user].push(tag)
+
+if(user===currentUser){
+renderTags()
 }
 }
 
-function addTag(){
-let tag=document.getElementById("tagInput").value
+function renderTags(){
+let container=document.getElementById("profileTags")
+container.innerHTML=""
+if(tags[currentUser]){
+tags[currentUser].forEach(t=>{
 let div=document.createElement("div")
 div.className="tag"
-div.innerText=tag
-document.getElementById("tags").appendChild(div)
+div.innerText=t
+container.appendChild(div)
+})
+}
 }
 </script>
 
