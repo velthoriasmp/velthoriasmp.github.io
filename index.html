@@ -1,131 +1,105 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velthoria SMP</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-<style>
-body{margin:0;font-family:Poppins,sans-serif;background:#07070f;color:white}
-nav{display:flex;gap:20px;padding:20px;background:#0d0d1a}
-nav a{cursor:pointer;color:#b983ff;text-decoration:none}
-
-.page{display:none;padding:60px 20px;text-align:center}
-.active{display:block}
-
-.card{background:#101022;padding:25px;border-radius:12px;max-width:420px;margin:20px auto}
-input,textarea{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#1a1a33;color:white}
-button{background:#7a5cff;border:none;padding:10px 20px;border-radius:6px;color:white;cursor:pointer}
-.tag{background:#6a5cff;padding:6px 12px;border-radius:6px;display:inline-block;margin:6px}
-</style>
+  <meta charset="UTF-8">
+  <title>Velthoria SMP</title>
 </head>
-
 <body>
 
-<nav>
-<a onclick="show('home')">Ana Sayfa</a>
-<a onclick="show('register')">Kayıt</a>
-<a onclick="show('profile')">Profil</a>
-<a onclick="show('apply')">Yetkili Başvuru</a>
-<a onclick="openPanel()">Yetkili Panel</a>
-</nav>
-
-<!-- HOME -->
-<div id="home" class="page active">
-<h1>Velthoria SMP</h1>
-<p>IP: velthoria.falixsrv.me</p>
-</div>
-
-<!-- REGISTER -->
-<div id="register" class="page">
-<div class="card">
-<h3>Kayıt</h3>
-<input id="regUser" placeholder="Kullanıcı adı">
+<h2>Kayıt Ol</h2>
+<input id="email" placeholder="E-posta">
+<input id="password" type="password" placeholder="Şifre">
+<input id="username" placeholder="Kullanıcı Adı">
 <button onclick="register()">Kayıt Ol</button>
-<p id="regMsg"></p>
-</div>
-</div>
 
-<!-- PROFILE -->
-<div id="profile" class="page">
-<div class="card">
-<h3>Profil</h3>
-<p id="profileName">Kullanıcı yok</p>
-<div id="profileTags"></div>
-</div>
-</div>
+<h2>Giriş Yap</h2>
+<input id="loginEmail" placeholder="E-posta">
+<input id="loginPassword" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş</button>
 
-<!-- APPLY -->
-<div id="apply" class="page">
-<div class="card">
-<h3>Yetkili Başvuru</h3>
-<textarea id="applyText" placeholder="Başvurun"></textarea>
-<button onclick="apply()">Gönder</button>
-<p id="applyMsg"></p>
-</div>
-</div>
+<hr>
 
-<!-- PANEL -->
-<div id="panel" class="page">
-<div class="card">
-<h3>Yetkili Panel</h3>
-<input id="tagUser" placeholder="Kullanıcı">
-<input id="tagText" placeholder="Tag">
-<button onclick="giveTag()">Tag Ver</button>
-</div>
+<div id="profile" style="display:none;">
+  <h2>Profil</h2>
+  <p id="userInfo"></p>
+
+  <h3>Yetkili Başvurusu</h3>
+  <textarea id="appForm" placeholder="Başvuru sorularını doldur"></textarea>
+  <button onclick="sendApplication()">Başvur</button>
+
+  <div id="adminPanel" style="display:none;">
+    <h3>Yetkili Paneli</h3>
+    <input id="tagUser" placeholder="Kullanıcı UID">
+    <input id="tagText" placeholder="Verilecek Tag">
+    <button onclick="giveTag()">Tag Ver</button>
+  </div>
 </div>
 
-<script>
-let currentUser=""
-let tags={}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-function show(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
-document.getElementById(id).classList.add("active")
-}
+const firebaseConfig = {
+  /* BURAYA FIREBASE CONFIG */
+};
 
-function register(){
-currentUser=document.getElementById("regUser").value
-document.getElementById("regMsg").innerText="Kayıt başarılı"
-document.getElementById("profileName").innerText=currentUser
-show("profile")
-}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-function apply(){
-document.getElementById("applyMsg").innerText="Başvuru gönderildi"
-}
+window.register = async () => {
+  const email = email.value;
+  const password = password.value;
+  const username = username.value;
 
-function openPanel(){
-let pass=prompt("Şifre")
-if(pass==="velthoria123"){show("panel")}
-else alert("Yanlış")
-}
+  const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-function giveTag(){
-let user=document.getElementById("tagUser").value
-let tag=document.getElementById("tagText").value
+  await setDoc(doc(db, "users", userCred.user.uid), {
+    username,
+    role: "user",
+    tag: ""
+  });
 
-if(!tags[user]) tags[user]=[]
-tags[user].push(tag)
+  alert("Kayıt başarılı");
+};
 
-if(user===currentUser){
-renderTags()
-}
-}
+window.login = async () => {
+  const email = loginEmail.value;
+  const password = loginPassword.value;
 
-function renderTags(){
-let container=document.getElementById("profileTags")
-container.innerHTML=""
-if(tags[currentUser]){
-tags[currentUser].forEach(t=>{
-let div=document.createElement("div")
-div.className="tag"
-div.innerText=t
-container.appendChild(div)
-})
-}
-}
+  const userCred = await signInWithEmailAndPassword(auth, email, password);
+  const userDoc = await getDoc(doc(db, "users", userCred.user.uid));
+
+  document.getElementById("profile").style.display = "block";
+  userInfo.innerText = JSON.stringify(userDoc.data());
+
+  if(userDoc.data().role === "admin"){
+    adminPanel.style.display = "block";
+  }
+};
+
+window.sendApplication = async () => {
+  const text = appForm.value;
+  const uid = auth.currentUser.uid;
+
+  await setDoc(doc(db, "applications", uid), {
+    text,
+    status: "pending"
+  });
+
+  alert("Başvuru gönderildi");
+};
+
+window.giveTag = async () => {
+  const uid = tagUser.value;
+  const tag = tagText.value;
+
+  await setDoc(doc(db, "users", uid), { tag }, { merge:true });
+  alert("Tag verildi");
+};
 </script>
 
 </body>
