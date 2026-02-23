@@ -1,105 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Velthoria SMP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velthoria SMP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#0f172a,#020617);
+  color:white;
+}
+
+header{
+  text-align:center;
+  padding:60px 20px;
+}
+
+header h1{
+  font-size:48px;
+  margin:0;
+  background:linear-gradient(90deg,#a855f7,#6366f1);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+header p{
+  opacity:.8;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:#020617;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:25px;
+  margin-top:20px;
+  box-shadow:0 0 40px rgba(0,0,0,.4);
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:#0f172a;
+  color:white;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#7c3aed,#6366f1);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  transform:scale(1.02);
+}
+
+footer{
+  text-align:center;
+  opacity:.6;
+  padding:20px;
+}
+</style>
 </head>
 <body>
 
-<h2>Kayıt Ol</h2>
-<input id="email" placeholder="E-posta">
-<input id="password" type="password" placeholder="Şifre">
-<input id="username" placeholder="Kullanıcı Adı">
-<button onclick="register()">Kayıt Ol</button>
+<header>
+<h1>Velthoria SMP</h1>
+<p>IP: velthoria.falixsrv.me</p>
+</header>
 
-<h2>Giriş Yap</h2>
-<input id="loginEmail" placeholder="E-posta">
-<input id="loginPassword" type="password" placeholder="Şifre">
-<button onclick="login()">Giriş</button>
+<div class="container">
 
-<hr>
+<div class="card">
+<h2>Yetkili Başvuru Formu</h2>
 
-<div id="profile" style="display:none;">
-  <h2>Profil</h2>
-  <p id="userInfo"></p>
+<input id="realname" placeholder="Gerçek isminiz">
+<input id="age" placeholder="Yaşınız">
+<input id="ign" placeholder="Minecraft kullanıcı adınız">
+<input id="years" placeholder="Kaç yıldır oynuyorsunuz">
+<input id="smp" placeholder="SMP deneyiminiz">
+<input id="job" placeholder="Sunucuda ne yaparsınız">
+<input id="time" placeholder="Günlük aktiflik süreniz">
+<input id="rules" placeholder="Kuralları kabul ediyor musunuz">
 
-  <h3>Yetkili Başvurusu</h3>
-  <textarea id="appForm" placeholder="Başvuru sorularını doldur"></textarea>
-  <button onclick="sendApplication()">Başvur</button>
-
-  <div id="adminPanel" style="display:none;">
-    <h3>Yetkili Paneli</h3>
-    <input id="tagUser" placeholder="Kullanıcı UID">
-    <input id="tagText" placeholder="Verilecek Tag">
-    <button onclick="giveTag()">Tag Ver</button>
-  </div>
+<button onclick="apply()">Başvuru Gönder</button>
 </div>
 
+</div>
+
+<footer>
+Velthoria SMP © 2026
+</footer>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, addDoc, collection } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  /* BURAYA FIREBASE CONFIG */
+  apiKey: "AIzaSyCE_0DWQ6YD-UPzsejQSpYZAA5ndrunppY",
+  authDomain: "velthoriasmp.firebaseapp.com",
+  projectId: "velthoriasmp",
+  storageBucket: "velthoriasmp.firebasestorage.app",
+  messagingSenderId: "94013374370",
+  appId: "1:94013374370:web:fec892e306a039defabcfb"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.register = async () => {
-  const email = email.value;
-  const password = password.value;
-  const username = username.value;
-
-  const userCred = await createUserWithEmailAndPassword(auth, email, password);
-
-  await setDoc(doc(db, "users", userCred.user.uid), {
-    username,
-    role: "user",
-    tag: ""
+window.apply = async function(){
+  await addDoc(collection(db,"applications"),{
+    realname:realname.value,
+    age:age.value,
+    ign:ign.value,
+    years:years.value,
+    smp:smp.value,
+    job:job.value,
+    time:time.value,
+    rules:rules.value,
+    date:new Date()
   });
 
-  alert("Kayıt başarılı");
-};
-
-window.login = async () => {
-  const email = loginEmail.value;
-  const password = loginPassword.value;
-
-  const userCred = await signInWithEmailAndPassword(auth, email, password);
-  const userDoc = await getDoc(doc(db, "users", userCred.user.uid));
-
-  document.getElementById("profile").style.display = "block";
-  userInfo.innerText = JSON.stringify(userDoc.data());
-
-  if(userDoc.data().role === "admin"){
-    adminPanel.style.display = "block";
-  }
-};
-
-window.sendApplication = async () => {
-  const text = appForm.value;
-  const uid = auth.currentUser.uid;
-
-  await setDoc(doc(db, "applications", uid), {
-    text,
-    status: "pending"
-  });
-
-  alert("Başvuru gönderildi");
-};
-
-window.giveTag = async () => {
-  const uid = tagUser.value;
-  const tag = tagText.value;
-
-  await setDoc(doc(db, "users", uid), { tag }, { merge:true });
-  alert("Tag verildi");
-};
+  alert("Başvurun gönderildi 🚀");
+}
 </script>
 
 </body>
