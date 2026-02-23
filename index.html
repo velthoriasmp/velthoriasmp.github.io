@@ -5,37 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Velthoria SMP</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#0f172a,#020617);
+  background:#020617;
   color:white;
 }
 
-header{
-  text-align:center;
-  padding:60px 20px;
+nav{
+  display:flex;
+  justify-content:space-between;
+  padding:18px 40px;
+  background:#020617;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  position:sticky;
+  top:0;
 }
 
-header h1{
-  font-size:48px;
+nav h2{
+  color:#a855f7;
+}
+
+nav a{
+  margin-left:20px;
+  text-decoration:none;
+  color:white;
+  opacity:.8;
+}
+
+.hero{
+  text-align:center;
+  padding:120px 20px;
+  background:radial-gradient(circle at center,#1e1b4b,#020617);
+}
+
+.hero h1{
+  font-size:60px;
   margin:0;
   background:linear-gradient(90deg,#a855f7,#6366f1);
   -webkit-background-clip:text;
   color:transparent;
 }
 
-header p{
-  opacity:.8;
+.section{
+  padding:60px 20px;
+  max-width:1100px;
+  margin:auto;
 }
 
-.container{
-  max-width:800px;
-  margin:auto;
-  padding:20px;
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
 }
 
 .card{
@@ -43,106 +67,87 @@ header p{
   border:1px solid rgba(255,255,255,.08);
   border-radius:16px;
   padding:25px;
-  margin-top:20px;
-  box-shadow:0 0 40px rgba(0,0,0,.4);
-}
-
-input,textarea{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.1);
-  background:#0f172a;
-  color:white;
+  text-align:center;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:10px;
   background:linear-gradient(90deg,#7c3aed,#6366f1);
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
   color:white;
-  font-weight:600;
   cursor:pointer;
-  transition:.2s;
-}
-
-button:hover{
-  transform:scale(1.02);
 }
 
 footer{
   text-align:center;
-  opacity:.6;
   padding:20px;
+  opacity:.6;
 }
 </style>
 </head>
 <body>
 
-<header>
+<nav>
+<h2>Velthoria</h2>
+<div>
+<a href="#home">Ana Sayfa</a>
+<a href="#store">Mağaza</a>
+<a href="#apply">Yetkili Başvuru</a>
+<a href="#about">Hakkımızda</a>
+</div>
+</nav>
+
+<section class="hero" id="home">
 <h1>Velthoria SMP</h1>
 <p>IP: velthoria.falixsrv.me</p>
-</header>
+</section>
 
-<div class="container">
+<section class="section" id="store">
+<h2>Mağaza</h2>
+<div class="cards">
 
 <div class="card">
-<h2>Yetkili Başvuru Formu</h2>
+<h3>VIP</h3>
+<p>Özel kitler ve komutlar</p>
+<button>Satın Al</button>
+</div>
 
-<input id="realname" placeholder="Gerçek isminiz">
-<input id="age" placeholder="Yaşınız">
-<input id="ign" placeholder="Minecraft kullanıcı adınız">
-<input id="years" placeholder="Kaç yıldır oynuyorsunuz">
-<input id="smp" placeholder="SMP deneyiminiz">
-<input id="job" placeholder="Sunucuda ne yaparsınız">
-<input id="time" placeholder="Günlük aktiflik süreniz">
-<input id="rules" placeholder="Kuralları kabul ediyor musunuz">
+<div class="card">
+<h3>VIP+</h3>
+<p>Daha fazla özellik</p>
+<button>Satın Al</button>
+</div>
 
-<button onclick="apply()">Başvuru Gönder</button>
+<div class="card">
+<h3>MVP</h3>
+<p>Tüm avantajlar</p>
+<button>Satın Al</button>
 </div>
 
 </div>
+</section>
+
+<section class="section" id="apply">
+<h2>Yetkili Başvuru</h2>
+<input placeholder="Gerçek isim">
+<input placeholder="Yaş">
+<input placeholder="Minecraft kullanıcı adı">
+<input placeholder="Deneyim">
+<button>Gönder</button>
+</section>
+
+<section class="section" id="about">
+<h2>Hakkımızda</h2>
+<p>
+Velthoria SMP oyuncuların özgürce oynayabileceği,
+ekonomi ve topluluk odaklı bir Minecraft sunucusudur.
+</p>
+</section>
 
 <footer>
 Velthoria SMP © 2026
 </footer>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, addDoc, collection } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCE_0DWQ6YD-UPzsejQSpYZAA5ndrunppY",
-  authDomain: "velthoriasmp.firebaseapp.com",
-  projectId: "velthoriasmp",
-  storageBucket: "velthoriasmp.firebasestorage.app",
-  messagingSenderId: "94013374370",
-  appId: "1:94013374370:web:fec892e306a039defabcfb"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.apply = async function(){
-  await addDoc(collection(db,"applications"),{
-    realname:realname.value,
-    age:age.value,
-    ign:ign.value,
-    years:years.value,
-    smp:smp.value,
-    job:job.value,
-    time:time.value,
-    rules:rules.value,
-    date:new Date()
-  });
-
-  alert("Başvurun gönderildi 🚀");
-}
-</script>
 
 </body>
 </html>
