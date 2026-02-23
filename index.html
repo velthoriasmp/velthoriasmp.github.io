@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velthoria SMP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#0b0b14;color:white}
+
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(10px);
+position:fixed;
+width:100%;
+z-index:10
+}
+nav h1{color:#a970ff}
+nav a{color:white;text-decoration:none;margin-left:20px;opacity:.8}
+nav a:hover{opacity:1}
+
+/* HERO */
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:radial-gradient(circle at center,#1a1035,#050509)
+}
+
+.hero img{
+width:220px;
+margin-bottom:20px;
+}
+
+.hero h2{
+font-size:48px;
+background:linear-gradient(90deg,#b983ff,#6a5cff);
+-webkit-background-clip:text;
+color:transparent;
+margin-bottom:10px
+}
+
+.hero p{opacity:.7;margin-bottom:25px}
+
+.btn{
+padding:14px 28px;
+border-radius:10px;
+background:linear-gradient(90deg,#7a5cff,#b983ff);
+color:white;
+text-decoration:none;
+font-weight:500;
+transition:.2s
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 20px #7a5cff}
+
+/* INFO */
+.info{
+padding:80px 20px;
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap
+}
+
+.card{
+background:#111122;
+padding:30px;
+border-radius:14px;
+width:260px;
+text-align:center;
+border:1px solid rgba(255,255,255,.05)
+}
+
+.card h3{color:#b983ff;margin-bottom:10px}
+
+/* FOOTER */
+footer{
+padding:30px;
+text-align:center;
+opacity:.5
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>VELTHORIA</h1>
+<div>
+<a href="#">Ana Sayfa</a>
+<a href="#">Discord</a>
+</div>
+</nav>
+
+<section class="hero">
+<img src="logo.png" alt="Velthoria Logo">
+<h2>Velthoria SMP</h2>
+<p>Yeni nesil Minecraft hayatta kalma deneyimi</p>
+<a class="btn" href="#">IP: velthoria.falixsrv.me</a>
+</section>
+
+<section class="info">
+
+<div class="card">
+<h3>⚔️ Survival</h3>
+<p>Gelişmiş ekonomi ve lonca sistemi</p>
+</div>
+
+<div class="card">
+<h3>👥 Topluluk</h3>
+<p>Aktif ve samimi oyuncu kitlesi</p>
+</div>
+
+<div class="card">
+<h3>🚀 Performans</h3>
+<p>Lag’siz stabil sunucu deneyimi</p>
+</div>
+
+</section>
+
+<footer>
+© 2026 Velthoria SMP — Tüm hakları saklıdır
+</footer>
+
+</body>
+</html>
